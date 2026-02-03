@@ -8,7 +8,7 @@ export const handler = async () => {
       id, name, category, price, status,
       description,
       created_at as "createdAt"
-    from products
+    from public.products
     order by created_at desc
   `;
 
