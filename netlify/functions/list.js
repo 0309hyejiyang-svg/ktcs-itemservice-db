@@ -3,15 +3,16 @@ import { neon } from "@netlify/neon";
 export const handler = async () => {
   const sql = neon();
 
-  const info = await sql`
-    select
-      current_database() as db,
-      current_schema() as schema,
-      current_user as user
+  const tables = await sql`
+    select schemaname, tablename
+    from pg_tables
+    where schemaname in ('public')
+    order by tablename;
   `;
 
   return {
     statusCode: 200,
-    body: JSON.stringify(info)
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(tables)
   };
 };
