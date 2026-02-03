@@ -2,9 +2,15 @@ import { neon } from "@netlify/neon";
 
 export const handler = async (event) => {
   const sql = neon();
-  const id = event.queryStringParameters?.id;
+  const { id } = JSON.parse(event.body || "{}");
 
-  await sql`delete from products where id = ${id}`;
+  await sql`
+    delete from public.products
+    where id = ${id}
+  `;
 
-  return { statusCode: 200 };
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ ok: true })
+  };
 };
