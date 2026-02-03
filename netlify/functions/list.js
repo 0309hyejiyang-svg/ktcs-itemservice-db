@@ -3,18 +3,15 @@ import { neon } from "@netlify/neon";
 export const handler = async () => {
   const sql = neon();
 
-  const rows = await sql`
+  const info = await sql`
     select
-      id, name, category, price, status,
-      description,
-      created_at as "createdAt"
-    from public.products
-    order by created_at desc
+      current_database() as db,
+      current_schema() as schema,
+      current_user as user
   `;
 
   return {
     statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(rows)
+    body: JSON.stringify(info)
   };
 };
